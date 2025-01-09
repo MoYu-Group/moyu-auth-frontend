@@ -14,7 +14,7 @@
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "sourceMap": true,
-    "baseUrl": "./pure-admin-thin",
+    "baseUrl": ".",
     "allowJs": false,
     "resolveJsonModule": true,
     "lib": [
