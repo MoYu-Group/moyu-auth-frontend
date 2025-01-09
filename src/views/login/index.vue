@@ -37,26 +37,47 @@ const ruleForm = reactive({
   password: "admin123"
 });
 
+// 动态路由
+// const onLogin = async (formEl: FormInstance | undefined) => {
+//   if (!formEl) return;
+//   await formEl.validate((valid, fields) => {
+//     if (valid) {
+//       loading.value = true;
+//       useUserStoreHook()
+//         .loginByUsername({ username: ruleForm.username, password: "admin123" })
+//         .then(res => {
+//           if (res.success) {
+//             // 获取后端路由
+//             return initRouter().then(() => {
+//               router.push(getTopMenu(true).path).then(() => {
+//                 message("登录成功", { type: "success" });
+//               });
+//             });
+//           } else {
+//             message("登录失败", { type: "error" });
+//           }
+//         })
+//         .finally(() => (loading.value = false));
+//     }
+//   });
+// };
+// 静态路由
 const onLogin = async (formEl: FormInstance | undefined) => {
   if (!formEl) return;
-  await formEl.validate((valid, fields) => {
+  await formEl.validate(valid => {
     if (valid) {
       loading.value = true;
-      useUserStoreHook()
-        .loginByUsername({ username: ruleForm.username, password: "admin123" })
-        .then(res => {
-          if (res.success) {
-            // 获取后端路由
-            return initRouter().then(() => {
-              router.push(getTopMenu(true).path).then(() => {
-                message("登录成功", { type: "success" });
-              });
-            });
-          } else {
-            message("登录失败", { type: "error" });
-          }
-        })
-        .finally(() => (loading.value = false));
+      setToken({
+        username: "admin",
+        roles: ["admin"],
+        accessToken: "eyJhbGciOiJIUzUxMiJ9.admin"
+      } as any);
+      // 全部采取静态路由模式
+      usePermissionStoreHook().handleWholeMenus([]);
+      addPathMatch();
+      router.push(getTopMenu(true).path);
+      message("登录成功", { type: "success" });
+      loading.value = false;
     }
   });
 };
