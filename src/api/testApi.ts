@@ -6,5 +6,5 @@ export interface Result {
 }
 
 export const getTest = () => {
-  return http.request<Result>("get", "/api/open/test");
+  return http.request<Result>("get", "/hello");
 };

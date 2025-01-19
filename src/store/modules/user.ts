@@ -15,6 +15,7 @@ import {
 } from "@/api/user";
 import { useMultiTagsStoreHook } from "./multiTags";
 import { type DataInfo, setToken, removeToken, userKey } from "@/utils/auth";
+import { redirectToSSOLogin, redirectToSSOLogout } from "@/utils/sso";
 
 export const useUserStore = defineStore({
   id: "pure-user",
@@ -77,7 +78,7 @@ export const useUserStore = defineStore({
           });
       });
     },
-    /** 前端登出（不调用接口） */
+    /** 前端登出 */
     logOut() {
       this.username = "";
       this.roles = [];
@@ -85,7 +86,8 @@ export const useUserStore = defineStore({
       removeToken();
       useMultiTagsStoreHook().handleTags("equal", [...routerArrays]);
       resetRouter();
-      router.push("/login");
+      // router.push("/login");
+      redirectToSSOLogout(window.location.href);
     },
     /** 刷新`token` */
     async handRefreshToken(data) {

@@ -13,6 +13,7 @@ import { stringify } from "qs";
 import NProgress from "../progress";
 import { getToken, formatToken } from "@/utils/auth";
 import { useUserStoreHook } from "@/store/modules/user";
+import { redirectToSSOLogin } from "../sso";
 
 // 相关配置请参考：www.axios-js.com/zh-cn/docs/#axios-request-config-1
 const defaultConfig: AxiosRequestConfig = {
@@ -120,6 +121,7 @@ class PureHttp {
     const instance = PureHttp.axiosInstance;
     instance.interceptors.response.use(
       (response: PureHttpResponse) => {
+        console.log("httpInterceptorsResponse");
         const $config = response.config;
         // 关闭进度条动画
         NProgress.done();
@@ -132,6 +134,13 @@ class PureHttp {
           PureHttp.initConfig.beforeResponseCallback(response);
           return response.data;
         }
+        // 未登录或登录过期的情况
+        if (response.data.code === "A0230") {
+          // 重定向到SSO登录页
+          redirectToSSOLogin(window.location.href);
+          return Promise.reject(new Error("登录已过期"));
+        }
+
         return response.data;
       },
       (error: PureHttpError) => {
