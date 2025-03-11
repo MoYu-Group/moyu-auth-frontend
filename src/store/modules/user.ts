@@ -11,7 +11,8 @@ import {
   type UserResult,
   type RefreshTokenResult,
   getLogin,
-  refreshTokenApi
+  refreshTokenApi,
+  getUserInfoApi
 } from "@/api/user";
 import { useMultiTagsStoreHook } from "./multiTags";
 import { type DataInfo, setToken, removeToken, userKey } from "@/utils/auth";
@@ -65,8 +66,33 @@ export const useUserStore = defineStore({
     SET_LOGINDAY(value: number) {
       this.loginDay = Number(value);
     },
+
+    /** 获取用户信息 */
+    async getUserInfo() {
+      return new Promise<UserResult>((resolve, reject) => {
+        // 调用获取用户信息的API
+        getUserInfoApi()
+          .then(data => {
+            if (data?.success) {
+              this.SET_USERNAME(data.content.username);
+              this.SET_AVATAR(data.content.avatar);
+              this.SET_NICKNAME(data.content.nickname);
+              this.SET_ROLES(data.content.roles);
+              this.SET_PERMS(data.content.permissions);
+              resolve(data);
+            } else {
+              reject(data);
+            }
+          })
+          .catch(error => {
+            reject(error);
+          });
+      });
+    },
+
     /** 登入 */
     async loginByUsername(data) {
+      console.log("loginByUsername");
       return new Promise<UserResult>((resolve, reject) => {
         getLogin(data)
           .then(data => {
@@ -80,6 +106,7 @@ export const useUserStore = defineStore({
     },
     /** 前端登出 */
     logOut() {
+      console.log("前端登出");
       this.username = "";
       this.roles = [];
       this.permissions = [];

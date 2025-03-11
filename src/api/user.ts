@@ -2,7 +2,7 @@ import { http } from "@/utils/http";
 
 export type UserResult = {
   success: boolean;
-  data: {
+  content: {
     /** 头像 */
     avatar: string;
     /** 用户名 */
@@ -42,4 +42,9 @@ export const getLogin = (data?: object) => {
 /** 刷新`token` */
 export const refreshTokenApi = (data?: object) => {
   return http.request<RefreshTokenResult>("post", "/refresh-token", { data });
+};
+
+/** 获取用户信息 */
+export const getUserInfoApi = () => {
+  return http.request<UserResult>("get", "/endpoint/user/loginUser");
 };

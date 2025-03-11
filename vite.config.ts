@@ -31,6 +31,11 @@ export default ({ mode }: ConfigEnv): UserConfigExport => {
           changeOrigin: true,
           rewrite: path => path.replace(/^\/api/, "")
         },
+        "/endpoint": {
+          // 这里填写后端地址
+          target: "http://server.ffis.me:9001",
+          changeOrigin: true
+        },
         "/hello": {
           // 这里填写后端地址
           target: "http://server.ffis.me:9001",

@@ -121,7 +121,6 @@ class PureHttp {
     const instance = PureHttp.axiosInstance;
     instance.interceptors.response.use(
       (response: PureHttpResponse) => {
-        console.log("httpInterceptorsResponse");
         const $config = response.config;
         // 关闭进度条动画
         NProgress.done();

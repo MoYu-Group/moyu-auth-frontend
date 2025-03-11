@@ -8,6 +8,7 @@ import remainingRouter from "./modules/remaining";
 import { useMultiTagsStoreHook } from "@/store/modules/multiTags";
 import { usePermissionStoreHook } from "@/store/modules/permission";
 import { isUrl, openLink, storageLocal, isAllEmpty } from "@pureadmin/utils";
+import { useUserStoreHook } from "@/store/modules/user";
 import {
   ascending,
   getTopMenu,
@@ -128,6 +129,10 @@ router.beforeEach((to: ToRouteType, _from, next) => {
       else document.title = item.meta.title as string;
     });
   }
+  // 获取用户信息
+  const userStore = useUserStoreHook();
+  userStore.getUserInfo();
+
   // Mock用户权限数据
   const userInfo = {
     roles: ["admin"], // 模拟用户角色
